@@ -1,28 +1,21 @@
-declare const require: (moduleName: string) => any;
-const readline = require("readline");
+import * as readline from "readline/promises";
 
-const rl = readline.createInterface({
-    input: (globalThis as any).process.stdin,
-    output: (globalThis as any).process.stdout
-});
-
-rl.question("Enter array elements: ", (input) => {
-
-    let arr: number[] = input.split(" ").map(Number);
-
-    rl.question("Enter element to search: ", (value) => {
-
-        let element: number = Number(value);
-        let count: number = 0;
-
-        for (let i = 0; i < arr.length; i++) {
-            if (arr[i] === element) {
-                count++;
-            }
-        }
-
-        console.log("Occurrences:", count);
-
-        rl.close();
+async function main() {
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
     });
-});
+
+    const input = await rl.question("Enter array elements: ");
+    const arr: number[] = input.trim().split(/\s+/).map(Number);
+
+    const value = await rl.question("Enter element to search: ");
+    const target: number = Number(value);
+
+    const count: number = arr.filter(num => num === target).length;
+    console.log(`Occurrences of ${target}: ${count}`);
+
+    rl.close();
+}
+
+main();
